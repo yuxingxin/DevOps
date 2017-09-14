@@ -44,3 +44,21 @@
 
 
 
+* **版本控制&协作开发**：Git命令操作、Gitlab、GitFlow工作流
+
+* **自动化构建和测试**：Maven、Gradle、Node、Cocoapods
+
+* **持续集成&交付**：Gitlab-CI，后期可以拓展到**Jenkins**
+
+* **容器平台**：Docker、Ubuntu、CenterOS、Debian
+
+  后续要做的计划：
+
+* 监控、警告&分析：zabbix
+
+* 日志管理：syslog —&gt; LogStash
+
+* 配置管理等
+
+
+
