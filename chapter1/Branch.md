@@ -414,3 +414,131 @@ git branch -d feature  //合并完删除功能分支
 > 2. 从主分支获取最新 commit 信息，并将当前子分支与主分支进行合并。
 
 综上，使用 `git pull --rebase` 和 `git merge --no-ff` 其实和直接使用 `git pull` `git merge` 得到的代码应该是一样。使用 `git pull --rebase` 主要是为是将提交线图平坦化，而 `git merge --no-ff` 则是刻意制造分叉。
+- #### 总结
+
+  综上，在Git中，我们有两种方法来合并分支，一种是通过`git merge`，一种是通过`git rebase`,他们的区别：
+
+  拿上面例子为例，merge所做的事情是：
+
+  ![](https://ws4.sinaimg.cn/large/006tNc79ly1fiunuzl4svj30ou0ii0to.jpg)
+
+  1. 首先找到feature分支和develop分支的最新的commit的最近公共祖先，在这C4和C3的最近公共祖先是C2
+  2. 将feature分支上在C2以后的所有commit合并成一个commit，并与develop分支合并
+  3. 如果有合并冲突（两个分支修改了一个文件），首先人工解决冲突
+  4. 在develop上产生合并后的新的commit
+
+  而rebase所做的事情也是合并分支，但是与merge相比略有不同：
+
+  ![](https://ws3.sinaimg.cn/large/006tNc79ly1fiunvqs6vjj30ra0est9j.jpg)
+
+  1. 首先找到feature分支和develop分支的最新的commit的最近公共祖先，在这C4和C3的最近公共祖先是C2
+  2. 将feature分支上在C2以后的所有commit全部移动到develop分支的最新commit之后，在这里就是把C3移动到C4之后，也代表这在develop分支上面进行C3相应的修改，需要注意的是，rebase并不是直接将C3移动到develop分支上面去，而是创建了一个副本，这一点我们可以通过hashcode发现是不一样的。
+  3. 最后，我们将feature分支上的功能合并入develop分支
+
+  ![](https://ws4.sinaimg.cn/large/006tNc79ly1fiunw6za36j30qs0f40ti.jpg)
+
+  ##### Squash
+
+  有时候我们在开发一段时间以后，commits又多又乱，如果我们整理一下这些commits，同时也是为了他人阅读你的提交，将多个合并为一个，就用到了Squash。（**注意前提是，此分支是只有你一个人开发， 且没有跟master分支合并过**）
+
+  ```
+  git rebase -i <commit>
+  ```
+
+  > squash准确来说并不是一个命令，而是rebase命令的一个功能。squash的作用很简单——合并多个commit。
+
+  如：
+
+  ```
+  git rebase -i HEAD~5
+
+  执行完后，Git会把所有commit列出来，让你进行一些修改，修改完成之后会根据你的修改来rebase。HEAD-5的意思是只修改最近的5个commit。
+
+  pick 033beb4 b1
+  pick b426a8a b2
+  pick c216era b3
+  pick d627c9a b4
+  pick e416c8b b5
+
+  # Rebase 033beb4..e416c8b onto 033beb4
+  #
+  # Commands:
+  #  p, pick = use commit
+  #  r, reword = use commit, but edit the commit message
+  #  e, edit = use commit, but stop for amending
+  #  s, squash = use commit, but meld into previous commit
+  #  f, fixup = like "squash", but discard this commit's log message
+  #  x, exec = run command (the rest of the line) using shell
+  #
+  # If you remove a line here THAT COMMIT WILL BE LOST.
+  # However, if you remove everything, the rebase will be aborted.
+  #
+  ```
+
+  上面pick是要执行的commit指令，另外还有reword、edit、squash、fixup、exec这5个，具体的含义可以看上面的注释解释，比较简单，这里就不说了。
+
+   我们要合并就需要修改前面的pick指令：
+
+```
+pick 033beb4 b1
+squash b426a8a b2
+squash c216era b3
+squash d627c9a b4
+squash e416c8b b5
+```
+
+   也就是下面这4个提交合并到最前面的那个提交里面，按esc，打上:wq提交保存离开。
+
+   接着是输入新的commit message
+
+```
+b
+# This is a combination of 2 commits.
+# The first commit's message is:
+# b1
+#
+# This is the 2nd commit message:
+#
+# b2
+#
+# This is the 3rd commit message:
+#
+# b3
+#
+# This is the 4th commit message:
+#
+# b4
+#
+# This is the 5th commit message:
+#
+# b5
+#
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# Not currently on any branch.
+# Changes to be committed:
+# (use "git reset HEAD <file>..." to unstage)
+#
+# modified:   a.txt
+#
+```
+
+其中第一行的b就是需要我们输入的新信息，同样编辑完保存，出现类似下面的信息：
+
+```
+Successfully rebased and updated refs/heads/develop.
+```
+
+最后可以用git log指令来验证commits是不是我们要变成的样子。
+
+##### merge --squash拓展
+
+有时候我们在bugfix分支上面由于修改bug提交了很多次，修复好了之后，我们想把这些提交合并入我们的master分支，这时候就可以使用`--squash`。
+
+```
+git checkout master
+git merge --squash bugfix
+git commit -m "bug fixed"
+```
+
+  上面操作会将bugfix分支上的所有commit都合并为一个commit，并把它并入我们的master分支上去。这里还有一点需要注意的是：--squash含义代表的是本地内容与不使用该选项的合并结果相同，但是不提交，不移动HEAD指针，所以我们要另外多一条语句来移动我们的HEAD指针，即最后的commit。
