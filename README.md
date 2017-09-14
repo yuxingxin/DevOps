@@ -16,7 +16,11 @@
 
 * 配置管理等
 
-!\[DevOps\]\([https://www.ctl.io/developers/assets/images/blog/Cloud-Application-Manager-DevOps\_Open\_Source\_Tools.png](https://www.ctl.io/developers/assets/images/blog/Cloud-Application-Manager-DevOps_Open_Source_Tools.png\)\)
+
+
+!\[DevOps\]\([https://www.ctl.io/developers/assets/images/blog/Cloud-Application-Manager-DevOps\_Open\_Source\_Tools.png](https://www.ctl.io/developers/assets/images/blog/Cloud-Application-Manager-DevOps_Open_Source_Tools.png%29\)\)
+
+
 
 * 1.代码仓库
 
