@@ -323,17 +323,3 @@ git flow release finish v1.0.0
 ```
 git flow hotfix start <bugfix-name>
 ```
-
-这个命令会创建一个名为 “hotfix/<bugfix-name>” 的分支。因为这是对产品代码进行修复，所以这个 hotfix 分支是基于 “master” 分支。这也是和 release 分支最明显的区别，release 分支都是基于 “develop” 分支的。因为你不应该在一个还不完全稳定的开发分支上对产品代码进行地修复。
-
-就像 release 一样，修复这个错误当然也会直接影响到项目的版本号.修复完成后执行finish：
-
-```
-git flow bugfix finish <bugfix-name>
-```
-
-这个过程非常类似于发布一个 release 版本：
-
-1. 完成的改动会被合并到 “master” 中，同样也会合并到 “develop” 分支中，这样就可以确保这个错误不会再次出现在下一个 release 中。
-2. 这个 hotfix 程序将被标记起来以便于参考。
-3. 这个 hotfix 分支将被删除，然后切换到 “develop” 分支上去。
