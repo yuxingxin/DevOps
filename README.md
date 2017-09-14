@@ -14,11 +14,7 @@
 
 * 日志管理：syslog —&gt; LogStash
 
-* 配置管理等
-
-!\[\]\(https://ws3.sinaimg.cn/large/006tNc79ly1fjj3mmpqhvj31kw0zkatq.jpg\)
-
-
+* 配置管理等![](https://ws3.sinaimg.cn/large/006tNc79ly1fjj3mmpqhvj31kw0zkatq.jpg)
 
 * 1.代码仓库
 
