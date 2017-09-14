@@ -1,5 +1,23 @@
 # DevOps实践总结
 
+* **版本控制&协作开发**：Git命令操作、Gitlab、GitFlow工作流
+
+* **自动化构建和测试**：Maven、Gradle、Node、Cocoapods
+
+* **持续集成&交付**：Gitlab-CI，后期可以拓展到**Jenkins**
+
+* **容器平台**：Docker、Ubuntu、CenterOS、Debian
+
+  后续要做的计划：
+
+* 监控、警告&分析：zabbix
+
+* 日志管理：syslog —&gt; LogStash
+
+* 配置管理等
+
+
+
 1. 代码仓库
 
    * 以Git工具实现的团队内部代码共享仓库
@@ -42,23 +60,6 @@
 
    * 分布式处理、负载均衡、服务器状态、应用状态数据集中在一起，轻松查看和管理每一台服务器；
 
-
-
-* **版本控制&协作开发**：Git命令操作、Gitlab、GitFlow工作流
-
-* **自动化构建和测试**：Maven、Gradle、Node、Cocoapods
-
-* **持续集成&交付**：Gitlab-CI，后期可以拓展到**Jenkins**
-
-* **容器平台**：Docker、Ubuntu、CenterOS、Debian
-
-  后续要做的计划：
-
-* 监控、警告&分析：zabbix
-
-* 日志管理：syslog —&gt; LogStash
-
-* 配置管理等
-
+* 
 
 
