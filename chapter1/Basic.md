@@ -2,10 +2,10 @@
 
 > 基本概念
 
-- 工作区：（修改后，执行「git add .」前）
-- 暂存区 stage：（执行「git add .」后，commit 前）
-- 版本库：（执行commit后，push推送到远程仓库前）
-- 远程库：（执行push推送后）
+* 工作区：（修改后，执行「git add .」前）
+* 暂存区 stage：（执行「git add .」后，commit 前）
+* 版本库：（执行commit后，push推送到远程仓库前）
+* 远程库：（执行push推送后）
 
 > 生成SSH keys
 
@@ -42,27 +42,27 @@ git ls-files
 
 ##### 比较操作
 
-> 查看工作区和暂存区之间的差异(会显示具体修改了哪些内容)，如果最后面跟了文件路径则是对比单个文件
+> 查看工作区和暂存区之间的差异\(会显示具体修改了哪些内容\)，如果最后面跟了文件路径则是对比单个文件
 
 ```
 git diff
 git diff xxx.java
 ```
 
-> 查看暂存区和 HEAD 之间的差异(会显示具体修改了哪些内容)
+> 查看暂存区和 HEAD 之间的差异\(会显示具体修改了哪些内容\)
 
 ```
 git diff --staged
 git diff --cached
 ```
 
-> 查看工作区和 HEAD(最近一次提交) 之间的差异(会显示具体修改了哪些内容)
+> 查看工作区和 HEAD\(最近一次提交\) 之间的差异\(会显示具体修改了哪些内容\)
 
 ```
 git diff HEAD
 ```
 
-> 查看工作区和 倒数第二次提交之间的差异(会显示具体修改了哪些内容)
+> 查看工作区和 倒数第二次提交之间的差异\(会显示具体修改了哪些内容\)
 
 ```
 git diff HEAD^
@@ -123,7 +123,7 @@ git diff ffd98b291e0caa6c33575c1ef465eae661ce40c9:filename b8e7b00c02b95b320f14b
 git diff master..develop
 ```
 
-> 查看工作区、暂存区与 HEAD 之间的差异(只显示增、删、改、未被跟踪，不会显示文件的具体内容)
+> 查看工作区、暂存区与 HEAD 之间的差异\(只显示增、删、改、未被跟踪，不会显示文件的具体内容\)
 
 ```
 git status
@@ -289,9 +289,9 @@ git checkout <commit-id>
 
 我们checkout本质上是修改HEAD里面的内容来让它指向不同分支的,而HEAD文件指向的分支就是我们当前的分支,该分支指向了一个commit，但是有时候HEAD不会指向任何分支，而是指向了一个commit，或者说是HEAD指向了一个没有分支名字的修订版本,此时,已经处于游离状态了，这时候我们在进行commit操作时就不会提交到任何分支上去。输入`git status`你也会发现没有在任何本地分支上。对于这类问题解决：
 
-- 基于本次提交创建一个临时分支.
-- 然后merge到当前工作分支.
-- 删除临时分支
+* 基于本次提交创建一个临时分支.
+* 然后merge到当前工作分支.
+* 删除临时分支
 
 将某个文件checkout到工作区
 
@@ -327,9 +327,9 @@ Working Directory    <-------------+
         |                 |        |
         |                 |        |
         V                 |   --hard HEAD
-     Index     			 |        |
+     Index                  |        |
         |         --mixed/-- HEAD  |       
-        |    			 |        |       
+        |                 |        |       
         V                 |        |       
   "git commit" <----|     |        |
         |           |     |        |
@@ -370,10 +370,10 @@ git revert -n HEAD~2..HEAD
 
 试想一个问题，撤销了之后，如何『恢复』之前的『撤销』呢？它取决于你想做的到底是什么?
 
-- 如果你希望准确地恢复项目的历史到某个时间点，用 `git reset --hard <commit>`
-- 如果你希望重建工作目录里的一个或多个文件，让它们恢复到某个时间点的状态，用 `git checkout <commit> -- <filename>`
-- 如果你希望把这些 commit 里的某一个重新提交到你的代码库里，可以用后面提到的cherry-pick: `git cherry-pick <commit>`
-- ……
+* 如果你希望准确地恢复项目的历史到某个时间点，用 `git reset --hard <commit>`
+* 如果你希望重建工作目录里的一个或多个文件，让它们恢复到某个时间点的状态，用 `git checkout <commit> -- <filename>`
+* 如果你希望把这些 commit 里的某一个重新提交到你的代码库里，可以用后面提到的cherry-pick: `git cherry-pick <commit>`
+* ……
 
 **cherry-pick**
 
@@ -446,3 +446,6 @@ git stash drop stash@{0}
 ```
 git stash clear
 ```
+
+
+
