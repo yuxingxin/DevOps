@@ -1,451 +1,339 @@
-#### 基础操作
-
-> 基本概念
-
-* 工作区：（修改后，执行「git add .」前）
-* 暂存区 stage：（执行「git add .」后，commit 前）
-* 版本库：（执行commit后，push推送到远程仓库前）
-* 远程库：（执行push推送后）
-
-> 生成SSH keys
-
-```
-ssh-keygen -t rsa -C "username@domain.com"     //填写自己的邮箱
-```
-
-> 初始化仓库
-
-```
-mkdir HelloGit
-cd HelloGit
-git init
-```
-
-**追踪文件**
-
-> 跟踪文件：将工作区里的修改添加到暂存区，git不会自动跟踪新建或删除的文件，每次添加或删除文件都需要执行如下命令：
-
-```
-git add xxx  //提交单个文件
-git rm xxx   //删除单个文件
-git add .   //提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件(仅在Git 1.x版本中表现这样，2.x版本同git add -A)
-git add -u  //提交被修改(modified)和被删除(deleted)文件，不包括新文件(new)
-git add -A  //提交所有变化
-git add --ignore-removal .  //2.x版本提供的，同Git 1.x版本中的git add .操作
-```
-
-> 查看已经被跟踪的文件
-
-```
-git ls-files
-```
-
-##### 比较操作
-
-> 查看工作区和暂存区之间的差异\(会显示具体修改了哪些内容\)，如果最后面跟了文件路径则是对比单个文件
-
-```
-git diff
-git diff xxx.java
-```
+分支操作
 
-> 查看暂存区和 HEAD 之间的差异\(会显示具体修改了哪些内容\)
+几乎所有的版本控制系统都以分支的方式进行操作，分支是独立于项目主线的一条支线，我们可以在不影响主线代码的情况下，在分支下进行工作。Git分支是轻量且高效的，这是因为传统的版本控制系统存储的数据是文件的变更，而Git则是存储一系列的文件快照（snapshot）。
 
-```
-git diff --staged
-git diff --cached
-```
+一些概念：
 
-> 查看工作区和 HEAD\(最近一次提交\) 之间的差异\(会显示具体修改了哪些内容\)
+master：主干分支，Git初始化仓库时，默认创建的分支名就是master
 
-```
-git diff HEAD
-```
+origin：默认远程分支
 
-> 查看工作区和 倒数第二次提交之间的差异\(会显示具体修改了哪些内容\)
+HEAD：分支指针，我们可以在项目根目录.git文件下找到一个HEAD文件：vi .git/HEAD,其内保存了指向当前分支最新提交的指针，该指针指向refs/heads/分支名文件，我们进入.git/refs/heads/目录，其下以分支名为文件名列出了所有分支
 
-```
-git diff HEAD^
-```
+    ref:refs/heads/master
 
-git diff用一张图来总结：
+    如图：       
+           HEAD  
+            |                          
+            |                       
+            V                         
+    	 master              
+            |                          
+            |                          
+            V                          
+         6d50f6 —— —— > eb4df5 —— —— > eed462
 
-```
-Working Directory    <----+--------+-------+
-        |                 |        |       |
-        |              diff HEAD   |       |
-        V                 |        |       |
-   "git add"              |        |       |
-        |                 |        |     diff
-        |                 |        |       |
-        V                 |        |       |
-     Index     <----+-----|--------|-------+
-        |           |     |        |       
-        |   diff --cached |        |       
-        V           |     |        |       
-  "git commit"      |     |        |
-        |           |     |        |
-        |           |     |        |
-        V           |     |        |
-      HEAD     <----+-----+        |
-        |                          |
-        |                       diff HEAD^
-        V                          |
-previous "git commit"              |
-        |                          |
-        |                          |
-        V                          |
-      HEAD^          <-------------+
-```
+查看本地分支列表
 
-> 关于HEAD的说明，可以理解为只是简单的一个文件，包含了你当前分支指向的最新那个提交的 SHA-1 索引值
+    git branch
 
-```
-➜ cd .git
-➜ .git git:(master) cat HEAD
-ref: refs/heads/master
-➜ .git git:(master) cat refs/heads/master
-b9346150f3624eb0c9b793917cb37bde9a4abb19
-➜  .git git:(master) cat ORIG_HEAD
-002d4e216df0c5633f2b7d7481b43e20bc5a4f0a
-```
+列出全部分支和分支最新的 commit 版本
 
-> 比较版本文件
+    git branch -v
 
-```
-//查看某两个版本之间的差异
-git diff ffd98b291e0caa6c33575c1ef465eae661ce40c9 b8e7b00c02b95b320f14b625663fdecf2d63e74c
+查看本地分支和远程分支的跟踪关联关系
 
-//查看某两个版本的某个文件之间的差异
-git diff ffd98b291e0caa6c33575c1ef465eae661ce40c9:filename b8e7b00c02b95b320f14b625663fdecf2d63e74c:filename
+    git branch -vv
 
-//查看 develop 分支最新提交和 master 分支最新提交的差别
-git diff master..develop
-```
+查看远程分支
 
-> 查看工作区、暂存区与 HEAD 之间的差异\(只显示增、删、改、未被跟踪，不会显示文件的具体内容\)
+    git branch -r
+    git branch -rv
 
-```
-git status
-```
+查看所有分支列表，包括本地分支和远程分支
 
-**提交文件**
+    git branch -a
+    git branch -av
 
-> 将暂存区的修改提交到当前分支
+添加一个新的远程仓库的关联。从远程仓库克隆到本地时，远程仓库名字就是「origin」
 
-```
-git commit -m "本次修改的注释"
-```
+    git remote add 远程仓库名字 仓库地址
 
-> 有时候我们提交完了才发现漏掉了几个文件没有加，或者提交信息写错了。想要撤消刚才的提交操作，可以使用「--amend」选项重新提交
+删除与一个远程仓库的关联
 
-```
-git commit --amend -m "追加修改的注释"
-```
+    git remote rm 远程仓库的名字
 
-**日志操作**
+显示可以抓取和推送的远程仓库的地址。如果没有推送权限，就看不到 push 的地址。
 
-> 查看日志，会显示所有的信息，包括文件的详细修改内容。最上面是最新的提交
+    git remote -v
 
-```
-git log
-```
+重命名远程仓库名字
 
-> 单行显示每一个 commit，包含分支合并图,参考「配置」章节的「配置常用别名」
+    git remote rename [old-name] [new-name]
 
-```
-git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-```
+从当前分支创建分支，但不切换到新创建的分支去
 
-> 查看所有日志，包括已经通过「reset」版本回退的日志
+    git branch 分支名称
 
-```
-git reflog
-```
+切换到指定分支
 
-**对比/比较扩展：对比分支差异，其中分支的概念后面会详细讲到**
+    git checkout 分支名称
 
-> 查看develop有，而master分支没有的提交
+从当前分支创建分支，并且切换到新创建的分支去，前面两个命令的整合版
 
-```
-git log develop ^master
+    git checkout -b 分支名称
 
-同理查看 master 中有，而 develop 中没有的内容：
-git log master ^develop
-```
+从当前分支的某个版本号新建一个分支,并且切换到新创建的分支去(注意，版本号写在「-b」的前面)
 
-> 查看develop比master多提交了哪些内容
+    git checkout 43237 -b 分支名称
 
-```
-git log master..develop
+从「分支 old」新建一个「分支 new」,并且切换到新创建的分支去(注意，源分支名写在「-b」的前面)
 
-注意，列出来的是两个点后边（此处即develop）多提交的内容。同理，想知道 master 比 develop 多提交了什么：
-git log develop..master
-```
+    git checkout old -b new
 
-> 不知道谁提交的多，谁提交的少，单纯想知道有什么不一样
+如果远程有个 develop 分支,而本地没有，想把远程的 develop 分支迁到本地
 
-```
-git log develop...master
-```
+    git checkout -b develop origin/develop
 
-> 在上述情况下，再显示出每个提交是在哪个分支上
+删除本地分支
 
-```
-git log --left-right develop...master
-//输出结果中左箭头 < 表示是 develop 的，右箭头 > 表示是 master的
-```
+    git branch -d 分支名称
+    git branch -D 分支名称  //强制删除
 
-​
+删除远程分支，本地分支名称不写，相当于推一个空分支到远程要删除的那个分支去
 
-**删除操作**
+    git push origin --delete 远程分支名称
+    git push origin :远程分支名称
 
-> 忽略某个已被跟踪的文件，但不会删除该文件
+分支推送：来源地分支名称:目的地分支名称」
 
-```
-git rm --cached 文件
-```
+    git pull origin 远程分支名称:本地分支名称
+    git push origin 本地分支名称:远程分支名称
 
-> 删除某个已被跟踪的文件，如果是删除整个目录需加上-r参数
+    //提交本地 develop 分支到远程的 master 分支
+    git push origin develop:master
 
-```
-git rm 文件相对路径
-git rm -rf 文件夹相对路径
-```
+    //提交本地 develop 分支到远程的 develop 分支
+    git push origin develop:develop
 
-> 删除未被跟踪的文件
+    //将本地的 develop 分支推送到 origin 主机上的 develop 分支。如果后者不存在，则会被新建
+    git push origin develop
 
-```
-// 删除 untracked files
-git clean -f
+    //如果当前分支与远程分支之间存在关联关系，则本地分支和远程分支都可以省略。将当前分支推送到 origin 主机的对应分支
+    git push origin
 
-// 连 untracked 的目录也一起删掉
-git clean -fd
+    //将本地的 develop 分支推送到 origin 主机，「-u」标记将它添加为远程跟踪的分支，后面就可以不加任何参数使用「git push」了
+    git push -u origin develop
 
-// 连 gitignore 的untrack 文件/目录也一起删掉 （慎用，一般这个是用来删掉编译出来的 .o之类的文件用的）
-git clean -xfd
+    //如果只关联了一个远程仓库，那么主机名都可以省略。将当前分支推送到关联的远程主机对应的分支+
+    git push
 
-// 在用上述 git clean 前，强烈建议加上 -n 参数来先看看将会删掉哪些文件，以防止重要文件被误删
-git clean -nxfd
-git clean -nf
-git clean -nfd
+    //如果远程主机的版本比本地版本更新，推送时会报错，要求先在本地做 git pull 合并差异，然后再推送到远程主机。这时，如果你一定要推送，可以加上「-f」,不建议使用
+    git push -f origin
 
--n 显示 将要 删除的 文件 和  目录
--f 删除 文件
--df 删除 文件 和 目录
-```
+建立本地「develop」分支与远程「origin/develop」分支的关联关系
 
-**撤销操作**
+    git branch --set-upstream-to=origin/develop develop
 
-> checkout：如果你文件只是在工作区修改了，但是还没提交到暂存区的时候，你可以用如下命令来撤销，简单的说就是暂存区覆盖工作区
+-u参数与--set-upstream-to区别：
 
-```
-git checkout -- [file]
+1. 首先解释一下upstream
 
-上面checkout作用于文件层面，它也可以作用于提交层面
-这时checkout 只是移动了 HEAD 到指定的 commit 上，然后更新工作目录，因为这可能会覆盖本地的修改，Git会强制你提交或者缓存工作目录中的所有更改，不然在checkout的时候这些更改都会丢失。
-```
+首先明确的是upstream并不是针对远程库，而是针对branch(分支)的，假设远程库origin上有分支branch1、branch2，本地分支有local1、local2。当初始状态时，远程库和本地库没有建立任何关联，当我们通过执行git branch --set-upstream-to origin/branch1 local1命令后，这时候local1和branch1就建立了关联，也就是说local1的upstream指向了branch1，这样的好处是在local1分支上面执行 git push （git pull同理）命令不用再附加任何参数，Git会自动将local1分支上的内容push到branch1分支上面去，同理local2和branch2也可以用同样方式建立关联。
 
-恢复版本或文件
+1. 再来解释一下-u参数：
 
-> 当前分支，从某个历史版本创建新的分支
+git push origin
 
-```
-git checkout -b <branch>
-```
+上面命令表示，将当前分支推送到origin主机的对应分支。
 
-> 指定分支，从某个历史版本创建新的分支
+如果当前分支只有一个追踪分支，那么主机名都可以省略。
 
-```
-git checkout -b <new-branch> <current-branch>
-```
+git push
 
-Git 的每个提交都有一个 SHA1 散列值（Hash 值）作为 ID，我们可以使用这些提交的ID来作为起点。
+如果当前分支与多个主机存在追踪关系，那么这个时候-u选项会指定一个默认的主机，这样后面就可以不加任何参数来使用git push/pull 命令了。
 
-```
-git checkout -b <new-branch> <commit-id>   //切换到该分支
-git branch <new-branch> <commit-id>   //不切换到该分支
-```
+git push -u origin master
 
-这时候，该新分支就以commit-id内容保持一致。注意的是完整的SHA-1大概有40位长，Git允许我们以前几位作为简写来标识ID。
+上面命令将本地的master分支推送到origin主机，同时指定origin主机为默认主机，后面就可以不加任何参数使用git push了。
 
-**将某个历史版本checkout到工作区**
+不带任何参数的git push 默认只推送当前分支，这叫做simple方式，此外，还有一种matching方式，会推送所有对应的远程分支的本地分支，Git2.0版本之前会默认采用matching方式，现在改为默认采用simple方式。
 
-这样做会产生一个分离的HEAD指针（Detached HEAD），所以不推荐这么做。如果我们工作在 `master` 分支上，希望 checkout 到 `develop` 分支上，我们会这么做：
+1. 再来说说他们两者的区别：
 
-```
-git checkout develop
-```
+假如我要将本地分支master与远程仓库origin里面的branch1建立关联，有下面两种方法：
 
-这里develop实际上是一个别名，其本质也是SHA1的散列值。它相当于：
+- git push -u origin branch1，该命令需要提前先把分支切换到master分支上面去
+- git branch --set-upstream-to=origin/branch1 master
 
-```
-git checkout <commit-id>
-```
+但是上面第一个方法更通用，因为我们的远程分支branch1有可能不存在，这时候你用第二个方法是不可行的，所以，git push -u origin branch1 相当于 git push origin branch1 + git branch --set-upstream-to=origin/branch1 master。
 
-将某个历史版本 checkout 到工作区。
+取消本地「develop」分支与远程分支的关联关系
 
-详细说下Detached HEAD ：
+    git branch --unset-upstream develop
 
-我们checkout本质上是修改HEAD里面的内容来让它指向不同分支的,而HEAD文件指向的分支就是我们当前的分支,该分支指向了一个commit，但是有时候HEAD不会指向任何分支，而是指向了一个commit，或者说是HEAD指向了一个没有分支名字的修订版本,此时,已经处于游离状态了，这时候我们在进行commit操作时就不会提交到任何分支上去。输入`git status`你也会发现没有在任何本地分支上。对于这类问题解决：
+只克隆远程仓库里的「develop」分支到本地
 
-* 基于本次提交创建一个临时分支.
-* 然后merge到当前工作分支.
-* 删除临时分支
+    git clone -b develop 远程仓库地址
 
-将某个文件checkout到工作区
+刷新远程分支列表
 
-```
-git checkout <commit-id> </path/to/file>
-```
+    git fetch -p
 
-如果checkout之后以一个新文件命名：
+取回远程分支的更新
 
-```
-git show <commit-id>:</path/to/file> > <new file name>
-```
+    git fetch [远程主机名]
 
-> reset：如果你文件在工作区修改了,并且也执行git add命令提交给暂存区了，这时候想撤销，就用如下命令，简单来说就是让HEAD来覆盖暂存区,注意默认工作区内容不变
+取回远程指定分支的更新，但并不会自动合并到本地相应的分支。在本地主机上要用「远程主机名/分支名」的形式读取。比如 origin 主机的 master，就要用「origin/master」读取
 
-```
-git reset HEAD [file]
+    git fetch [远程主机名] 远程分支名
 
-所以接上面来讲，如果想工作区内容也撤销到原来的那样，可以加上--hard参数
-git reset --hard HEAD
+    首先从远程的origin的master主分支下载最新的版本到origin/master分支上
+    git fetch origin master
+    然后比较本地的master分支和origin/master分支的差别
+    git log -p master..origin/master
+    最后进行合并
+    git merge origin/master
 
-说明：
-reset三种方式：git reset [mode] [<commit>]
---soft（这种不会修改你目前暂存区或者工作区中所做的任何修改,只会回滚commit）
---mixed/--（这种是在reset时不加任何参数的默认行为，暂存区和你指定的提交同步，但工作目录不受影响）
---hard（这种会把暂存区和工作目录都同步到你指定的提交，使用之前请三思，这确实是你要的行为！）
+    那换成更清晰一点的操作：从远程获取最新的版本到本地的tmp分支上，之后再进行比较合并
+    git fetch origin master:tmp
+    git diff tmp
+    git merge tmp
 
-Working Directory    <-------------+
-        |                          |
-        |                          |
-        V                          |
-   "git add"  <-----------+        |
-        |                 |        |
-        |                 |        |
-        V                 |   --hard HEAD
-     Index                  |        |
-        |         --mixed/-- HEAD  |       
-        |                 |        |       
-        V                 |        |       
-  "git commit" <----|     |        |
-        |           |     |        |
-        |     --soft HEAD |        |
-        V           |     |        |
-      HEAD     <----+-----+--------+        
-        |                          
-        |                       
-        V                         
-previous "git commit"              
-        |                          
-        |                          
-        V                          
-      HEAD^          
+取回远程主机的更新以后，可以在它的基础上，创建一个新的分支。在「origin/master」的基础上，创建一个「develop」分支
 
-因此我们可以用这个来回溯版本，其中commit指定版本ID，可以通过git reflog查看要回溯到的版本。
-综上，git reset 也可以用于提交层面和文件层面（就是说操作可以是针对一个提交的，也可以单独作用于某个文件的），当 git reset 命令加上文件路径的时候，这个操作就是针对文件层面的。git reset 将暂存区同步到你指定的那个提交。而--soft、--mixed/-- 和 --hard 对文件层面的 git reset 毫无作用，只作用与提交层面。
+    git checkout -b develop origin/master
 
-reset在提交层面和checkout在提交层面最大的不同就是：reset会删除在这之前的commit，而checkout只是移动HEAD 到指定的commit上。
-```
+取回远程分支并合并
 
-> revert：如果你将错误的提交同步到了远端，而你又想撤销，这个时候可以用 git revert 命令。
+    git pull 相当于是从远程获取最新版本并merge到本地,如果加–rebase 参数，就是使用git rebase 代替git merge，后面会细说rebase。
+    git pull origin master
 
-```
-与前面两个不同的是git revert 只能作用于提交层面。
-它和指定 SHA 对应的 commit 是相反的（或者说是反转的）。如果原先的 commit 是“物质”，新的 commit 就是“反物质” — 任何从原先的 commit 里删除的内容会在新的 commit 里被加回去，任何在原先的 commit 里加入的内容会在新的 commit  里被删除。
-git revert <commit>
+    从某种意义上来说：
+    git pull = git fetch + git merge FETCH_HEAD
 
-说明：
-1.不加-n 参数会直接让我们输入这次回退的注释，加了的话会将改动的文件放入暂存区，并手动执行「git commit -m "注释"」来提交这次回退的信息，这种情况往往用在一次回退多个提交的情况，否则里面的每一个扔到的提交都会让我们输入一遍注释。
-撤销多个提交。左开右闭(]，撤销 HEAD~2 和 HEAD 之间的提交（不包含HEAD~2, 包含HEAD]
-git revert -n HEAD~2..HEAD
+    在实际使用中，git fetch更安全一些，因为在merge前，我们可以查看更新情况，然后再决定是否合并
 
-2.revert命令会产生一个新的提交，新的 commit 用于回滚之前的 commit。这个和 reset 有很大的不同，reset是直接删除 commit 节点，而不是产生新节点。当然你也可以用 git reset 和 git push -f 来撤销远端错误的提交，但这种方式并不优雅，而且有可能会影响到其他的协作者。
+关于FETCH_HEAD的理解
 
-3.revert会产生一个新的 commit，期间如果有冲突的话解决完冲突后执行「git revert --continue」，解决冲突的时候如果想取消这次revert的话执行「git revert --abort」。
-```
+它指某个branch在服务器上的最新状态，每一个执行fetch操作的项目都会存在一个FETCH_HEAD列表，这个列表保存在.git/FETCH_HEAD文件中，其中每一行都对应于远程服务器的一个分支，当前分支指向的是FETCH_HEAD，就是这个文件 第一行对应的那个分支。
 
-试想一个问题，撤销了之后，如何『恢复』之前的『撤销』呢？它取决于你想做的到底是什么?
+一般存在两种情况：
 
-* 如果你希望准确地恢复项目的历史到某个时间点，用 `git reset --hard <commit>`
-* 如果你希望重建工作目录里的一个或多个文件，让它们恢复到某个时间点的状态，用 `git checkout <commit> -- <filename>`
-* 如果你希望把这些 commit 里的某一个重新提交到你的代码库里，可以用后面提到的cherry-pick: `git cherry-pick <commit>`
-* ……
+- 如果没有显示的指定远程分支，则远程分支的master将作为默认的FETCH_HEAD。
+- 如果指定了远程分支，就将这个远程分支作为FETCH_HEAD。
 
-**cherry-pick**
+四种用法：
 
-> 把已经提交的 commit, 从一个分支放到另一个分支。加上 -n 参数不会立即提交，而是放入暂存区，这一点和 revert 时类似。
+1. git fetch
+   这将更新git remote 中所有的远程repo 所包含分支的最新commit-id, 将其记录到.git/FETCH_HEAD文件中。
 
-```
-git checkout master
-git cherry-pick <commit>
-git cherry-pick -x <commit> //保留原提交中信息
-例如，假设我们有个稳定版本的分支，叫v2.0，另外还有个开发版本的分支v3.0，我们不能直接把两个分支合并，这样会导致稳定版本混乱，但是又想增加一个v3.0中的功能到v2.0中，这里就可以使用cherry-pick了,其实也就是对已经存在的commit 进行再次提交.
-git checkout v2.0分支
-git cherry-pick 38361a55 # 这个 38361a55 号码，位于v3.0分支中：
-```
+1. git fetch remote_repo
+   这将更新名称为remote_repo 的远程repo上的所有branch的最新commit-id，将其记录。
+2. git fetch remote_repo remote_branch_name
+   这将更新名称为remote_repo 的远程repo上的名为remote_branch_name的分支。
+3. git fetch remote_repo remote_branch_name:local_branch_name
+   这将更新名称为remote_repo 的远程repo上的名为remote_branch_name的分支 ，并在本地创建local_branch_name 本地分支保存远端分支的所有数据。
 
-> 批量cherry-pick，就是一次可以cherry-pick一个区间的commit。
+合并分支操作
 
-```
-git cherry-pick <start-commit>..<end-commit>   左开右闭区间，不包含<start-commit>
-git cherry-pick <start-commit>^..<end-commit>  闭区间，包含<start-commit>
-注意<start-commit>时间上早于<end-commit>
-```
+指定分支并入当前分支
 
-> 中间出现失败，则可以执行如下对应操作：
+    git merge 指定分支
+    git merge --no-ff 指定分支     //非快速推进合并
 
-```
-git cherry-pick --continue
-git cherry-pick --quit
-git cherry-pick --abort
-```
 
-**储藏操作**
 
-> 开发一个功能时，发现之前的版本有个bug，把刚才的修改储藏起来，然后去修复bug,修复完记得提交，然后再把刚才储藏的修改取出来，继续开发该功能
+如上图所示，主干分支上有分叉，而功能分支有提交，此时如果将功能分支合并入主干，那么将会产生一个新的提交，如最右边图。
 
-1. 文件已经被 git 跟踪，只是修改了代码（而不是新添加文件），我们 可以使用「git stash」或「git stash save "注释"」来暂存修改
-2. 如果有新添加的文件，那么就需要添加「-a」参数（如「git stash -a」或「git stash save -a "注释"」）， 或先「git add .」然后再使用「git stash」或「git stash save "注释"」来暂存修改
+- Fast-Forward：快速推进合并
 
-> 查看所有 stash，最上面是最近添加的
 
-```
-git stash list
-```
 
-> 把刚才藏起来的修改取出并删除 stash，如果是删除最近的一个 stash，可以省略「stash@{0}」
+    主干分支没有分叉，git只是简单的将master的指针移动到功能分支的指针处。
 
-```
-git stash pop stash@{0}
-```
+- No-Fast-Forward：非快速推进合并
 
-> 把刚才藏起来的修改取出，如果是取出最近的一个 stash，可以省略「stash@{0}」
 
-```
-git stash apply stash@{0}
-```
 
-> 删除 stash，如果是删除最近的一个 stash，可以省略「stash@{0}」
+    而我们传入--no-ff 指定非快速推进合并，此时将会创建一个新的提交，将功能分支和主干分支进行了合并，即便主干分支它没有分叉。默认git会智能的将能ff合并的执行ff合并，不能ff合并才会创建commit合并
 
-```
-git stash drop stash@{0}
-```
+rebase(变基/衍合)
 
-综上，Git把stash内容存在某个地方了，但是需要恢复一下，有两个办法：
+首先它也是合并分支操作，说这个之前，我们先放张图：
 
-一是用`git stash apply`恢复，但是恢复后，stash内容并不删除，你需要用`git stash drop`来删除；
 
-另一种方式是用`git stash pop`，恢复的同时把stash内容也删了。
 
-> 清空所有 stash
+如果你正在 code review，看到上图（下文将称之为：提交线图）之后，特别对于有某种洁癖的人，是否感觉线条特别乱？如果是的话，请继续往下看。
 
-```
-git stash clear
-```
+Git 作为分布式版本控制系统，所有修改操作都是基于本地的，在团队协作过程中，假设你和你的同伴在本地中分别有各自的新提交，而你的同伴先于你 push 了代码到远程分支上，所以你必须先执行 git pull 来获取同伴的提交，然后才能 push 自己的提交到远程分支。而按照 Git 的默认策略，如果远程分支和本地分支之间的提交线图有分叉的话（即不是 fast-forwarded），Git 会执行一次 merge 操作，因此产生一次没意义的提交记录，从而造成了像上图那样的混乱。
 
+其实在 pull 操作的时候，，使用 git pull --rebase 选项即可很好地解决上述问题。 加上 --rebase 参数的作用是，提交线图有分叉的话，Git 会 rebase 策略来代替默认的 merge 策略。
 
+举例如下：
 
+假设提交线图在执行 pull 前是这样的：
+
+        A---B---C  remotes/origin/master
+        /
+    D---E---F---G  master
+
+如果是执行 git pull 后，提交线图会变成这样：
+
+        A---B---C remotes/origin/master
+        /         \
+    D---E---F---G---H master
+
+结果多出了 H 这个没必要的提交记录。如果是执行 git pull --rebase 的话，提交线图就会变成这样：
+
+                remotes/origin/master
+                    |
+    D---E---A---B---C---F'---G'  master
+
+F G 两个提交通过 rebase 方式重新拼接在 C 之后，多余的分叉去掉了，目的达到。
+
+多数情况下，我们使用 git pull --rebase 是为了使提交线图更好看，从而方便 code review。不过，如果你对使用 git 还不是十分熟练的话，建议是 git pull --rebase 多练习几次之后再使用，因为 rebase 在 git 中，算得上是『危险行为』。
+
+另外，还需注意的是，使用 git pull --rebase 比直接 pull 容易导致冲突的产生，如果预期冲突比较多的话，建议还是直接 fetch。
+
+对比刚刚讲的merge —no-diff
+
+上述的 git pull --rebase 策略目的是修整提交线图，使其形成一条直线，而刚刚用到的 git merge --no-ff <branch-name> 策略偏偏是反行其道，刻意地弄出提交线图分叉出来。
+
+假设你在本地准备合并两个分支，而刚好这两个分支是 fast-forwarded 的，那么直接合并后你得到一个直线的提交线图，当然这样没什么坏处，但如果你想更清晰地告诉你同伴：这一系列的提交都是为了实现同一个目的，那么你可以刻意地将这次提交内容弄成一次提交线图分叉。
+
+执行 git merge --no-ff <branch-name> 的结果大概会是这样的：
+
+
+
+往往更好的习惯是：在合并分支之前（假设要在本地将 feature 分支合并到 develop 分支），会先检查 feature 分支是否『部分落后』于远程 develop 分支：
+
+    git checkout develop
+    git pull //更新 develop 分支
+    git log feature..develop  //这里两个点表示打印出develop比feature多提交的内容
+
+如果没有输出任何提交信息的话，即表示 feature 对于 develop 分支是 up-to-date 的。如果有输出的话而马上执行了 git merge --no-ff 的话，提交线图会变成这样：
+
+
+
+所以这时在合并前，通常会先执行：
+
+    git checkout feature
+    git rebase develop
+
+    //变基后才开始合并
+    git checkout develop
+    git merge feature
+
+    git branch -d feature  //合并完删除功能分支
+
+这样就可以将 feature 重新拼接到更新了的 develop 之后，然后就可以合并了，最终得到一个干净舒服的提交线图。
+
+遇到冲突：
+
+一般我们解决完冲突后加入暂存区后，接下来有这么三种指令：
+
+- 执行git rebase --continue指令继续变基，后面无须再commit，它会自动apply补丁。
+- 执行git rebase --skip指令，跳过解决冲突。
+- 执行git rebase --abort指令，终止变基，回到分支变基前状态。
+
+变基有风险，一定确定你熟悉rebase操作才可在项目中使用，这里有个黄金法则：
+
+一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。
+
+它主要应用场景：
+
+1. 在合并主分支至子分支时，来保持主分支树的整洁，方便版本回退和问题追踪。
+2. 从主分支获取最新 commit 信息，并将当前子分支与主分支进行合并。
+
+综上，使用 git pull --rebase 和 git merge --no-ff 其实和直接使用 git pull git merge 得到的代码应该是一样。使用 git pull --rebase 主要是为是将提交线图平坦化，而 git merge --no-ff 则是刻意制造分叉。
