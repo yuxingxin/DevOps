@@ -328,8 +328,6 @@ git flow hotfix start <bugfix-name>
 
 就像 release 一样，修复这个错误当然也会直接影响到项目的版本号.修复完成后执行finish：
 
-
-
 ```
 git flow bugfix finish <bugfix-name>
 ```
