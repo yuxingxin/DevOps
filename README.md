@@ -16,14 +16,16 @@
 
 * 配置管理等
 
-!\[DevOps\]\(https://www.ctl.io/developers/assets/images/blog/Cloud-Application-Manager-DevOps\_Open\_Source\_Tools.png\)
+!\[DevOps\]\([https://www.ctl.io/developers/assets/images/blog/Cloud-Application-Manager-DevOps\_Open\_Source\_Tools.png](https://www.ctl.io/developers/assets/images/blog/Cloud-Application-Manager-DevOps_Open_Source_Tools.png\)\)
 
 * 1.代码仓库
+
   * 以Git工具实现的团队内部代码共享仓库
 
   * 分支保护和权限控制,可轻松地管理和审查成员代码;
 
   * 详细的数据统计,清晰了解团队成员的贡献和提交情况;
+
 * 2.编译构建
 
   * 提供的通用构建环境将源代码打包成产品
