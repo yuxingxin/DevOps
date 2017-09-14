@@ -7,5 +7,7 @@
     * [Git分支操作](/chapter1/Branch.md)
     * [附录](/chapter1/Appendix.md)
 * [第二部分：工作流](/chapter2/Workflow.md)
+    * [集中式工作流](/chapter1/Centeral_Workflow.md)
+
 * [第三部分：GitLab](/chapter3/GitLab.md)
 * [第四部分：持续集成之GitLab-CI](/chapter4/GitLab-CI.md)
