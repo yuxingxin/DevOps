@@ -21,3 +21,4 @@
     * [维基](/chapter3/Wiki.md)
     * [代码片段](/chapter3/Wiki.md)
 * [第四部分：持续集成之GitLab-CI](/chapter4/GitLab-CI.md)
+    * [基本概念](/chapter4/Concept.md)
