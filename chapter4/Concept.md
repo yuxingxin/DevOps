@@ -49,3 +49,4 @@ $ sudo yum install gitlab-ci-multi-runner
 #### 总结
 
 每当我们执行提交或者推送操作时，GitLab就会将这个变动通知GitLab CI，这是GitLab CI会找出与这个工程相关联的GitLab Runner，并通知这些Runner运行一次我们的流水线，对应执行Stages里面的Jobs任务，也就是预先定义好的脚本。所以GitLab Runner 就是一个用来执行软件集成脚本的东西，它就像工厂里面一个个工人，而GitLab CI就是这个工厂的管理中心，所有工人都需要在GitLab CI里面进行注册，并且表明自己的身份，即是为哪个项目服务的，当我们的工程发生变化时，GitLab CI就会通知相应的负责这个项目的工人「Runner」执行对应项目的集成脚本，即流水线上面的工作/任务。
+在进行CI之前，我们需要先注册Runner。
