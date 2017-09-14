@@ -289,3 +289,51 @@ git flow bugfix finish <feature-name>
 
 1. 它会把bugfix分支整合进develop分支
 2. 删除当下的bugfix分支，并且切换到develop分支
+
+
+**管理release**
+
+当我们的develop分支是一个成熟的release版本时，第一，它包括所有新的功能和必要的修复；第二，它已经被彻底的测试过了。如果上述两点都满足，那就是时候开始生成一个新的 release 了。
+
+```
+git flow release start v1.0.0
+```
+
+请注意，release 分支是使用版本号命名的。完成一些上线的准备工作，比如文档版本说明等等，然后就执行finish。
+
+```
+git flow release finish v1.0.0
+```
+
+这个命令会完成如下一系列的操作:
+
+1. 首先，git-flow 会拉取远程仓库，以确保目前是最新的版本。
+2. 然后，release 的内容会被合并到 “master” 和 “develop” 两个分支中去，这样不仅产品代码为最新的版本，而且新的功能分支也将基于最新代码。
+3. 为便于识别和做历史参考，release 提交会被标记上这个 release 的名字，在这里为v1.0.0
+4. 清理操作，版本分支会被删除，并且回到 “develop”。
+
+从 Git 的角度来看，release 版本现在已经完成。如果我们做了CI，对 “master” 的提交就是在这里触发了定义的部署流程，当然也可以通过手动部署。
+
+![](https://ws2.sinaimg.cn/large/006tKfTcly1fj48ce5vsrj30kf0ff408.jpg)
+
+**管理hotfix**
+
+很多时候，仅仅在几个小时或几天之后，当对 release 版本作做全面测试时，可能就会发现一些小错误。这时候创建hotfix分支：
+
+```
+git flow hotfix start <bugfix-name>
+```
+
+这个命令会创建一个名为 “hotfix/<bugfix-name>” 的分支。因为这是对产品代码进行修复，所以这个 hotfix 分支是基于 “master” 分支。这也是和 release 分支最明显的区别，release 分支都是基于 “develop” 分支的。因为你不应该在一个还不完全稳定的开发分支上对产品代码进行地修复。
+
+就像 release 一样，修复这个错误当然也会直接影响到项目的版本号.修复完成后执行finish：
+
+```
+git flow bugfix finish <bugfix-name>
+```
+
+这个过程非常类似于发布一个 release 版本：
+
+1. 完成的改动会被合并到 “master” 中，同样也会合并到 “develop” 分支中，这样就可以确保这个错误不会再次出现在下一个 release 中。
+2. 这个 hotfix 程序将被标记起来以便于参考。
+3. 这个 hotfix 分支将被删除，然后切换到 “develop” 分支上去。
