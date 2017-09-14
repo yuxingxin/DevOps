@@ -446,5 +446,3 @@ git stash drop stash@{0}
 ```
 git stash clear
 ```
-
-#### 分支操作
