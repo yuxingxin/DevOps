@@ -16,4 +16,5 @@
     * [个人主页](/chapter3/Personal_Profile.md)
     * [群组主页](/chapter3/Group_Profile.md)
     * [项目主页](/chapter3/Project_Profile.md)
+    * [问题/issue](/chapter3/Issue.md)
 * [第四部分：持续集成之GitLab-CI](/chapter4/GitLab-CI.md)
