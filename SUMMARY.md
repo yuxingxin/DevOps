@@ -17,4 +17,5 @@
     * [群组主页](/chapter3/Group_Profile.md)
     * [项目主页](/chapter3/Project_Profile.md)
     * [问题/issue](/chapter3/Issue.md)
+    * [合并请求](/chapter3/Merge_Request.md)
 * [第四部分：持续集成之GitLab-CI](/chapter4/GitLab-CI.md)
