@@ -19,4 +19,5 @@
     * [问题/issue](/chapter3/Issue.md)
     * [合并请求](/chapter3/Merge_Request.md)
     * [维基](/chapter3/Wiki.md)
+    * [代码片段](/chapter3/Wiki.md)
 * [第四部分：持续集成之GitLab-CI](/chapter4/GitLab-CI.md)
