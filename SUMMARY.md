@@ -5,7 +5,7 @@
   * [Git安装与配置](/chapter1/Install.md)
   * [Git基础操作](/chapter1/Basic.md)
   * [Git分支操作](/chapter1/Branch.md)
-  * \[Git标签操作\]\(/chapter1/Tag.md\)
+  * [Git标签操作](/chapter1/Tag.md)
   * [附录](/chapter1/Appendix.md)
 * [第二部分：工作流](/chapter2/Workflow.md)
   * [集中式工作流](/chapter2/Centeral_Workflow.md)
