@@ -88,8 +88,8 @@
     > 需要GitLab CI版本8.15及以上。
 
     它用于定义负责部署配置的项目服务所需要的变量。
-
-    ![](https://ws1.sinaimg.cn/large/006tKfTcly1fji12m809pj31050xn0wd.jpg)
+    ![](https://ws2.sinaimg.cn/large/006tNc79ly1fjnr6cwb2rj30v80gnwh1.jpg)
+    ![](https://ws4.sinaimg.cn/large/006tNc79ly1fjnr6s3s72j30v20h2tbh.jpg)
 
   Debug Tracing
 

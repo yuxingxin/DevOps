@@ -1,3 +1,5 @@
+# Logs
+logs
 *.log
 
 # Runtime data
@@ -17,12 +19,17 @@ coverage
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
-# Dependency directory
-# Deployed apps should consider commenting this line out:
-# see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
+# Node rules:
+
+## Dependency directory
+## Commenting this out is preferred by some people, see
+## https://docs.npmjs.com/misc/faq#should-i-check-my-node_modules-folder-into-git
 node_modules
 
-_book/
-book.pdf
-book.epub
-book.mobi
+# Book build output
+_book
+
+# eBook build output
+*.epub
+*.mobi
+*.pdf

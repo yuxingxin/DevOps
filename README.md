@@ -58,19 +58,20 @@
 
   * 分布式处理、负载均衡、服务器状态、应用状态数据集中在一起，轻松查看和管理每一台服务器；
 
-### Workflow(工作流)
+### Workflow\(工作流\)
+
 
 1. master分支只用来做合并，合并来自develop分支的内容，测试通过会把develop分支内容合并到master分支上
 
 2. 运维每次从master分支取出来最新版本做部署
 
-3. 开发人员每次都从develop分支检出feature**(功能)**分支做开发，开发完成以后提交MR(Merge Request 相当于Github的Pull Request)，开发组长review code之后合并入develop分支，开发人员删除该feature分支，当有新的功能需求时，重复做上述工作:
+3.  开发人员每次都从develop分支检出feature**(功能)**分支做开发，开发完成以后提交MR(Merge Request 相当于Github的Pull Request)，开发组长review code之后合并入develop分支，开发人员删除该feature分支，当有新的功能需求时，重复做上述工作:
 
    > 新功能需求到来——>检出feature分支 ——> 开发——>完成后提交MR——>组长review code——>合并入develop分支——> 开发人员删除feature分支
 
 4. 开发组长push到develop分支后开始由自动化任务做构建，(单元)测试等工作，这一过程一直循坏持续，直到功能开发完成，也称为**持续集成(Continuous Integration)**：它强调开发人员提交了新代码之后，立刻进行构建、（单元）测试。根据测试结果，我们可以确定新代码和原有代码能否正确地集成在一起。
 
-   ![持续集成](https://pic2.zhimg.com/c5c8e6f40c7c133e22402c00bb7e1a25_b.png)
+   ![](https://ws3.sinaimg.cn/large/006tNc79ly1fjnpyome2kj30go07cdgf.jpg)
 
 5. 发布测试版本：根据产品人员那边进度来安排测试版本发布，发布工作由各开发组长执行，打tag标签
 
@@ -92,10 +93,10 @@
 
 6. 部署测试服务器也由自动化任务来做，触发这一动作的指令，即为我们的打版本命令，这个过程一直循环迭代直到测试完成，也称为**持续交付(Continuous Delivery)**：它是在持续集成的基础上，将集成后的代码部署到更贴近真实运行环境的「类生产环境」（*production-like environments*）中或者说是测试环境中去。
 
-   ![持续交付](https://pic2.zhimg.com/db7198e3c39e4656e18efcb4bd1b20b1_b.png)
+   ![](https://ws4.sinaimg.cn/large/006tNc79ly1fjnpzejypuj30go0ccmyh.jpg)
 
 7. 测试完成后，即进入版本的Beta阶段，发布外网，针对开发组长要做的工作就是，把版本合并入master分支，由运维人员从master分支上取出该版本部署，这过程一直持续下去，即为版本迭代；如果我们将整个运维发布 过程也交由自动化任务来做，那就是**持续部署(Continuous Deployment)**：它是在持续交付的基础上，把产品部署到生产环境的过程自动化。
 
-   ![持续部署](https://pic2.zhimg.com/f96f19e4d567aad5006d841963a86e41_b.png)
+   ![](https://ws4.sinaimg.cn/large/006tNc79ly1fjnpzn1o6hj30go0ccq48.jpg)
 
 8. 后续的工作就是我们一直不断的修复，迭代版本，将版本阶段从**RC阶段**过渡到**Release阶段**的过程。

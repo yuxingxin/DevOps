@@ -2,9 +2,9 @@
 
 #### 安装
 
-RedHat系列：yum install git Debian系列：apt-get install git
+RedHat系列：yum install git     Debian系列：apt-get install git
 
-[Windows](https://git-scm.com/download/win)[Mac](https://sourceforge.net/projects/git-osx-installer/)
+[Windows](https://git-scm.com/download/win)    [Mac](https://sourceforge.net/projects/git-osx-installer/)
 
 #### 配置
 
