@@ -159,6 +159,28 @@ git push
 git push -f origin
 ```
 
+> 本地分支重命名(还没有推送到远程)
+
+```
+git branch -m <旧分支名称> <新分支名称>
+```
+
+> 远程分支重命名 (已经推送远程-假设本地分支和远程对应分支名称相同)
+
+```
+//1.重命名远程分支对应的本地分支
+git branch -m <旧分支名称> <新分支名称>
+
+//2.删除远程分支
+git push --delete origin <旧分支名称>
+
+//3.上传新命名的本地分支
+git push origin <新分支名称>
+
+//4.把修改后的本地分支与远程分支关联
+git branch --set-upstream-to origin/<新分支名称>
+```
+
 > 建立本地「develop」分支与远程「origin/develop」分支的关联关系
 
 ```
