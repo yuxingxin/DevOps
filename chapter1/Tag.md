@@ -50,7 +50,7 @@ git push origin v1.0.0
 git push origin --tags
 ```
 
-检出本地标签：
+删除本地标签：
 
 ```
 git tag -d v1.0.0
