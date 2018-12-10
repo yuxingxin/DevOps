@@ -268,6 +268,30 @@ git merge tmp
 git checkout -b develop origin/master
 ```
 
+或者
+
+```
+git checkout -b develop --track origin/master
+```
+
+> 如果取回的远程分支名和本地分支名相同，即在本地创建一个master分支，那么还可以这样写：
+
+```
+git checkout --track origin/master
+```
+
+> 上面步骤也可以这样一步做完
+
+```
+git fetch origin origin/master:master
+```
+
+最后再切换下分支就可以了
+
+```
+git checkout master
+```
+
 > 取回远程分支并合并
 
 ```
