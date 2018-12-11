@@ -283,6 +283,8 @@ git checkout --track origin/master
 > 上面步骤也可以这样一步做完
 
 ```
+git fetch origin master
+或者：
 git fetch origin origin/master:master
 ```
 
