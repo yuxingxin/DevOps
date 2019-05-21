@@ -7,6 +7,9 @@
 * 版本库：（执行commit后，push推送到远程仓库前）
 * 远程库：（执行push推送后）
 
+上面这4个概念可以用一张图来总结：
+![](http://ww2.sinaimg.cn/large/006tNc79ly1g38zxnmpd4j30xo0fc12i.jpg)
+
 > 生成SSH keys
 
 ```
