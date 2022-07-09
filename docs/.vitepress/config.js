@@ -1,7 +1,8 @@
 export default {
     lang: 'zh-CN',
     title: 'DevOps',
-    description: 'Just playing around',
+    description: 'DevOps实践整理',
+    ignoreDeadLinks: true,
     lastUpdated: true,
     themeConfig: {
         setTitle: 'DevOps',
