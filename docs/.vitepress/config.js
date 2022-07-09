@@ -10,7 +10,7 @@ export default {
             { text: 'RxJava', link: 'https://devops.yuxingxin.com' }
         ],
         editLink: {
-            pattern: 'https://github.com/yuxingxin/DevOps/edit/main/docs/:path',
+            pattern: 'https://github.com/yuxingxin/DevOps/edit/master/docs/:path',
             text: 'Edit this page on GitHub'
           },
         socialLinks: [
