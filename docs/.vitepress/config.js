@@ -8,7 +8,7 @@ export default {
         setTitle: 'DevOps',
         nav: [
             { text: 'DevOps', link: '/' , activeMatch: '/'},
-            { text: 'RxJava', link: 'https://devops.yuxingxin.com' }
+            { text: 'RxJava', link: 'https://rxjava.yuxingxin.com' }
         ],
         editLink: {
             pattern: 'https://github.com/yuxingxin/DevOps/edit/master/docs/:path',
